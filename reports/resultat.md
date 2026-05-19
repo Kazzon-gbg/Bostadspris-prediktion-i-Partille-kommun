@@ -6,10 +6,12 @@ I detta projekt har jag byggt och jämfört flera maskininlärningsmodeller för
 förutsäga slutpris på bostäder i Partille kommun. Datasetet består av verkliga
 bostadsförsäljningar från perioden **2023-01-02 till 2026-05-18**.
 
-I den första versionen testades enklare modeller. I denna förbättrade version
-används även ensemblemodeller, exempelvis Random Forest och Gradient Boosting.
-Dessutom används log-transformering av slutpriset för att modellen inte ska
-påverkas lika mycket av de dyraste bostäderna.
+Flera regressionsmodeller jämförs för att se vilken metod som bäst fångar
+sambanden i bostadsdatan. Linear Regression används som en enkel och tydlig
+basmodell, medan Decision Tree, Random Forest och Gradient Boosting kan fånga
+mer komplexa och icke-linjära samband mellan bostädernas egenskaper och
+slutpris. Slutpriset log-transformeras under träningen för att modellen inte
+ska påverkas lika mycket av de dyraste bostäderna.
 
 Den bästa modellen i denna körning blev **Random Forest log-target**.
 

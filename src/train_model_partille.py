@@ -2,7 +2,7 @@
 """
 Inlämningsuppgift
 
-Mikael Karlsson 2026 för ITHS Python för AI
+Mikael Karlsson 2026 för ITHS Pythonprogrammering för AI utveckling VT 2026
 
 Scriptet läser in en städad CSV med verkliga bostadsförsäljningar från
 Partille kommun, skapar tydliga figurer, tränar flera regressionsmodeller
@@ -583,10 +583,12 @@ I detta projekt har jag byggt och jämfört flera maskininlärningsmodeller för
 förutsäga slutpris på bostäder i Partille kommun. Datasetet består av verkliga
 bostadsförsäljningar från perioden **{summary["min_date"]} till {summary["max_date"]}**.
 
-I den första versionen testades enklare modeller. I denna förbättrade version
-används även ensemblemodeller, exempelvis Random Forest och Gradient Boosting.
-Dessutom används log-transformering av slutpriset för att modellen inte ska
-påverkas lika mycket av de dyraste bostäderna.
+Flera regressionsmodeller jämförs för att se vilken metod som bäst fångar
+sambanden i bostadsdatan. Linear Regression används som en enkel och tydlig
+basmodell, medan Decision Tree, Random Forest och Gradient Boosting kan fånga
+mer komplexa och icke-linjära samband mellan bostädernas egenskaper och
+slutpris. Slutpriset log-transformeras under träningen för att modellen inte
+ska påverkas lika mycket av de dyraste bostäderna.
 
 Den bästa modellen i denna körning blev **{best_model_name}**.
 

@@ -2,7 +2,7 @@
 
 
 
-Detta projekt är ett examensarbete för kursen **Python for AI**. Projektet
+Detta projekt är ett examensarbete för kursen **Pythonprogrammering för AI utveckling**. Projektet
 undersöker om det går att prediktera slutpris för bostäder i **Partille kommun**,
 inklusive **Sävedalen**, med hjälp av verklig bostadsdata och maskininlärning.
 
@@ -321,3 +321,13 @@ Python:
 Resultatet visar att det går att skapa en användbar modell för bostadspriser i
 Partille kommun, men också att modellens kvalitet beror mer på relevanta
 features än på antalet kolumner.
+
+
+## Verktyg och programvara som använts: 
+
+- Python v 3.14.5
+- Microsoft VS Code
+- Typora (Skapa / Redigera MD dokument)
+- Chat GPT 5.5 Thinking (För felsökning och tips)
+- Github = https://github.com/Kazzon-gbg/Bostadspris-prediktion-i-Partille-kommun 
+
