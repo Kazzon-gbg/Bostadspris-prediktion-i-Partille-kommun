@@ -217,6 +217,8 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Mac 
-.ds_Store
+# macOS
+.DS_Store
 
+# Local editor/workspace files
+*.code-workspace
