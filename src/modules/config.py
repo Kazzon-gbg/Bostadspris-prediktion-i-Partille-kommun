@@ -6,7 +6,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_PATH = PROJECT_ROOT / "data" / "partille_housing_real_2023_today.csv"
 FIGURE_DIR = PROJECT_ROOT / "outputs" / "figures"
 MODEL_DIR = PROJECT_ROOT / "outputs" / "models"
-REPORT_PATH = PROJECT_ROOT / "reports" / "resultat.md"
+REPORT_PATH = PROJECT_ROOT / "reports" / "report_3years_manual.md"
 
 TARGET = "final_price_sek"
 RANDOM_STATE = 42

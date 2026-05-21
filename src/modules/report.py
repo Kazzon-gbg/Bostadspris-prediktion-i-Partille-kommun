@@ -68,7 +68,7 @@ def write_report(
     results: pd.DataFrame,
     best_model_name: str,
 ) -> None:
-    """Skriv den slutliga resultatrapporten till reports/resultat.md."""
+    """Skriv den slutliga Markdown-rapporten till aktuell rapportfil."""
     missing_values = df.isna().sum()
     best_row = results.loc[best_model_name]
     summary = get_dataset_summary(df)

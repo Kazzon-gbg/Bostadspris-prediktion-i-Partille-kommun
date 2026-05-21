@@ -1,13 +1,29 @@
 # Bostadspris-prediktion i Partille kommun med Python och AI
 
-Detta projekt är ett examensarbete för kursen **ITHS Pythonprogrammering för AI-utveckling**.
+**Mikael Karlsson 2026**   
 
-Projektet undersöker om det går att prediktera slutpris för bostäder i **Partille kommun**,
-inklusive **Sävedalen**, med hjälp av verklig bostadsdata och maskininlärning.
+Detta projekt är ett examensarbete för kursen **ITHS Pythonprogrammering för
+AI-utveckling VT-2026**
 
-Projektet använder en färdig CSV-fil med bostadsdata. Själva hämtningen av data
-från Booli ingår **inte** i detta projekt, utan hanteras separat i ett annat
-skript/projekt. Se avsnittet **Verktyg och programvara som använts**.
+Projektet undersöker om det går att prediktera slutpris för bostäder i
+**Partille kommun**, inklusive **Sävedalen**, med hjälp av verklig bostadsdata
+och maskininlärning.
+
+Projektet visar ett komplett AI-arbetsflöde:
+
+1. läsa in bostadsdata från CSV
+2. kontrollera och rensa data
+3. skapa features
+4. visualisera data
+5. träna flera maskininlärningsmodeller
+6. jämföra modellernas resultat
+7. analysera om 1, 2 eller 3 års data fungerar bäst
+8. skapa Markdown- och PDF-rapporter
+9. reflektera över modellens begränsningar och etiska risker
+
+Själva hämtningen av bostadsdata från Booli ingår **inte** i detta projekt.
+Datahämtningen har gjorts separat och detta projekt fokuserar på analys,
+modellering, rapportering och tolkning.
 
 ## Problemformulering
 
@@ -29,14 +45,35 @@ Eftersom slutpriset är ett numeriskt värde är detta ett **regressionsproblem*
 
 ## Dataset
 
-Den huvudsakliga datafilen är:
+Projektet använder tre dataset som bygger på samma ursprungliga bostadsdata,
+men med olika tidsperioder. Syftet är att testa om modellen blir bättre av mer
+historisk data eller av kortare och mer aktuell data.
+
+| Rapport | Period | Datafil | Antal rader efter städning | Syfte |
+|---|---|---|---:|---|
+| Rapport 1 | 1 år | `data/partille_housing_real_last_1_year.csv` | 295 | testar mest aktuell data |
+| Rapport 2 | 2 år | `data/partille_housing_real_last_2_years.csv` | 599 | testar en kompromiss mellan aktualitet och datamängd |
+| Rapport 3 | 3 år | `data/partille_housing_real_2023_today.csv` | 948 | huvudmodell med mest data |
+
+Den ursprungliga huvudfilen är:
 
 ```text
 data/partille_housing_real_2023_today.csv
 ```
 
-Datasetet består av verkliga bostadsförsäljningar i Partille kommun från 
+Den består av verkliga bostadsförsäljningar i Partille kommun från
 **2023-01-02 till 2026-05-18**.
+
+Utifrån huvudfilen har två kortare CSV-filer skapats:
+
+```text
+data/partille_housing_real_last_1_year.csv
+data/partille_housing_real_last_2_years.csv
+```
+
+1-årsfilen omfattar **2025-05-19 till 2026-05-18** och 2-årsfilen omfattar
+**2024-05-20 till 2026-05-18**. Datumen startar vid första faktiska försäljning
+som finns i respektive filtrerad period.
 
 Target/y-värdet är:
 
@@ -100,40 +137,20 @@ days_on_market
 slutpriset och ska därför inte användas som input när modellen ska prediktera
 slutpris. URL- och adresskolumner är identifierare och riskerar att göra
 modellen för beroende av enskilda objekt i stället för generella mönster.
-Helt tomma metadatafält filtreras också bort eftersom de inte tillför stabil
-information.
-
-## Avgränsning: datahämtning ingår inte
-
-Det här projektet fokuserar på:
-
-- dataförståelse
-- datarensning inför modellering
-- feature engineering
-- visualisering
-- modellträning
-- modellutvärdering
-- rapportering
-
-Själva insamlingen av data från Booli ingår inte i projektet. Den hanteras
-separat och resultatet från den processen är CSV-filen:
-
-```text
-data/partille_housing_real_2023_today.csv
-```
-
-Det gör projektet tydligare som ett maskininlärningsprojekt: modellen tränas på
-ett färdigt dataset, medan datahämtning är ett separat förarbete.
 
 ## Projektstruktur
 
 ```text
 .
 ├── data/
-│   └── partille_housing_real_2023_today.csv
+│   ├── partille_housing_real_2023_today.csv
+│   ├── partille_housing_real_last_1_year.csv
+│   └── partille_housing_real_last_2_years.csv
 ├── src/
-│   ├── train_model_partille.py
-│   ├── train_model_partille_toPDF.py
+│   ├── create_comparison_pdf.py
+│   ├── train_model_partille_1year.py
+│   ├── train_model_partille_2years.py
+│   ├── train_model_partille_3years.py
 │   └── modules/
 │       ├── config.py
 │       ├── figures.py
@@ -142,11 +159,21 @@ ett färdigt dataset, medan datahämtning är ett separat förarbete.
 │       ├── report.py
 │       └── report_pdf.py
 ├── reports/
-│   ├── resultat.md
-│   └── report_YYMMDD_HHMM.pdf
+│   ├── report_1year_YYMMDD_HHMM.md
+│   ├── report_1year_YYMMDD_HHMM.pdf
+│   ├── report_2years_YYMMDD_HHMM.md
+│   ├── report_2years_YYMMDD_HHMM.pdf
+│   ├── report_3years_YYMMDD_HHMM.md
+│   ├── report_3years_YYMMDD_HHMM.pdf
+│   ├── report_jamforelse_YYMMDD_HHMM.md
+│   └── report_jamforelse_YYMMDD_HHMM.pdf
 ├── outputs/
 │   ├── figures/
-│   └── models/
+│   ├── figures_1year/
+│   ├── figures_2years/
+│   ├── models/
+│   ├── models_1year/
+│   └── models_2years/
 ├── requirements.txt
 └── README.md
 ```
@@ -161,39 +188,69 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Om `requirements.txt` inte är uppdaterad kan följande paket installeras manuellt:
+Paket som används:
 
-```bash
-pip install pandas numpy matplotlib seaborn scikit-learn joblib pillow
-```
+- pandas
+- numpy
+- matplotlib
+- seaborn
+- scikit-learn
+- joblib
+- pillow
 
 ## Kör projektet
 
-Kör modellträningen:
+Projektet har ett separat körskript för varje träningsperiod. Varje
+modellskript skapar både Markdown-rapport och PDF-rapport.
 
 ```bash
-python src/train_model_partille.py
+python src/train_model_partille_1year.py
+python src/train_model_partille_2years.py
+python src/train_model_partille_3years.py
+python src/create_comparison_pdf.py
 ```
 
-Skriptet gör följande:
+De tre första skripten skapar varsin modellrapport. Det sista skriptet skapar
+slutrapporten som jämför 1, 2 och 3 år.
 
-1. Läser in CSV-filen.
+## Rapporter
+
+Alla rapporter sparas i `reports/` och följer samma namngivning:
+
+```text
+report_rapportnamn_YYMMDD_HHMM.md
+report_rapportnamn_YYMMDD_HHMM.pdf
+```
+
+| Rapport | Kommando | Markdown | PDF |
+|---|---|---|---|
+| Rapport 1, 1 år | `python src/train_model_partille_1year.py` | `reports/report_1year_YYMMDD_HHMM.md` | `reports/report_1year_YYMMDD_HHMM.pdf` |
+| Rapport 2, 2 år | `python src/train_model_partille_2years.py` | `reports/report_2years_YYMMDD_HHMM.md` | `reports/report_2years_YYMMDD_HHMM.pdf` |
+| Rapport 3, 3 år | `python src/train_model_partille_3years.py` | `reports/report_3years_YYMMDD_HHMM.md` | `reports/report_3years_YYMMDD_HHMM.pdf` |
+| Slutrapport, jämförelse | `python src/create_comparison_pdf.py` | `reports/report_jamforelse_YYMMDD_HHMM.md` | `reports/report_jamforelse_YYMMDD_HHMM.pdf` |
+
+Rapport 1, 2 och 3 är separata modellrapporter. Slutrapporten är en jämförelse
+mellan de tre modellrapporterna.
+
+## Modellflöde
+
+Varje modellkörning gör följande:
+
+1. Läser in rätt CSV-fil.
 2. Gör grundläggande datakontroll.
 3. Skapar extra features.
 4. Skapar visualiseringar.
 5. Delar upp datan i träningsdata och testdata.
 6. Tränar flera regressionsmodeller.
-7. Utvärderar modellerna.
+7. Utvärderar modellerna med MAE, RMSE, R² och MAPE.
 8. Sparar bästa modellen.
-9. Skapar en resultatrapport.
-
-Projektets huvudflöde körs via klassen `HousingPriceProject` i
-`src/modules/project.py`. Klassen samlar ansvar för dataladdning,
-feature engineering, modellträning, utvärdering och rapportering. Det gör
-koden lättare att felsöka och vidareutveckla än om hela flödet låg direkt i
-ett enda skript.
+9. Skapar Markdown-rapport.
+10. Skapar PDF-rapport.
 
 ## Objektorienterad struktur
+
+Projektets huvudflöde körs via klassen `HousingPriceProject` i
+`src/modules/project.py`.
 
 Projektet använder både funktioner och objektorienterad programmering.
 Hjälpfunktionerna i `src/modules/functions.py`, `src/modules/figures.py` och
@@ -207,63 +264,24 @@ Klassen visar objektorienterade principer genom att:
   tränade modeller, resultat och bästa modell
 - dela upp arbetsflödet i metoder som `prepare_data()`, `train_and_evaluate()`,
   `write_reports()` och `run()`
-- använda ett resultatobjekt, `HousingPriceProjectResult`, för att samla
-  information från en färdig körning
-- göra flödet mer testbart och felsökningsbart eftersom varje steg kan köras
-  och kontrolleras separat
+- använda resultatobjektet `HousingPriceProjectResult` för att samla information
+  från en färdig körning
+- göra flödet mer testbart och felsökningsbart eftersom varje steg kan köras och
+  kontrolleras separat
 
-## Extra funktion: PDF-rapport
+## Feature engineering
 
-Utöver den vanliga modellkörningen finns ett separat skript som skapar en
-färdig PDF-rapport:
+För att hjälpa modellen skapas flera extra features:
 
-```bash
-python src/train_model_partille_toPDF.py
-```
+- `total_area_m2` = boarea + biarea
+- `has_asking_price` = om bostaden har känt eller beräknat utgångspris
+- `has_extra_area` = om biarea finns
+- `has_plot_area` = om tomtarea finns
+- `quarter` = kvartal baserat på månad
+- `area_rooms_interaction` = boarea × antal rum
 
-Detta skript kör samma grundflöde som `train_model_partille.py`, alltså:
-
-- läser in och städar datasetet
-- skapar feature engineering
-- sparar diagram i `outputs/figures/`
-- tränar och utvärderar modellerna
-- sparar bästa modellen i `outputs/models/`
-- uppdaterar Markdown-rapporten `reports/resultat.md`
-
-Skillnaden är att PDF-skriptet dessutom skapar en professionellt formaterad
-PDF-rapport i `reports/`.
-
-PDF-filen får ett tidsstämplat filnamn:
-
-```text
-reports/report_YYMMDD_HHMM.pdf
-```
-
-Exempel:
-
-```text
-reports/report_260519_2130.pdf
-```
-
-PDF-rapporten är tänkt som en mer presentationklar rapport än Markdown-filen.
-Den innehåller:
-
-- sammanfattning av dataset och modellresultat
-- nyckeltal för bästa modell
-- tabell med modelljämförelse
-- kort tolkning av utvärderingsmåtten
-- alla sparade diagram med förklarande bildtexter
-
-Alla PDF-sidor skapas i **A4-format**. Diagrammen placeras i en kompakt layout
-med två diagram per sida för att rapporten ska vara lätt att läsa utan att bli
-onödigt lång.
-
-### Skillnad mellan de två körningarna
-
-| Skript | Skapar modell | Skapar figurer | Skapar Markdown | Skapar PDF | Använd när |
-|---|---:|---:|---:|---:|---|
-| `src/train_model_partille.py` | Ja | Ja | Ja | Nej | du vill köra grundanalysen och få `resultat.md` |
-| `src/train_model_partille_toPDF.py` | Ja | Ja | Ja | Ja | du vill skapa en färdig rapport-PDF |
+Dessa features bygger inte på slutpriset och kan därför användas utan att skapa
+dataläckage.
 
 ## Modeller
 
@@ -287,32 +305,36 @@ Modellerna utvärderas med:
 - **R²** – hur stor del av variationen i slutpris modellen förklarar
 - **MAPE** – genomsnittligt procentuellt fel
 
-MAPE är särskilt pedagogiskt för bostadspriser eftersom det visar felet i
-procent i stället för bara kronor.
+RMSE används för att välja bästa modell i rapporterna eftersom stora fel i
+bostadspris kan vara särskilt viktiga. MAPE är pedagogiskt eftersom det visar
+felet i procent i stället för bara kronor.
 
-## Modellresultat
+## Resultat
 
-I den förbättrade modellversionen med feature engineering, tydligare feature-urval
-och log-transformering
-uppnåddes ungefär följande nivå:
+| Period | Bästa modell enligt RMSE | MAE | RMSE | R² | MAPE |
+|---|---|---:|---:|---:|---:|
+| 1 år | Random Forest log-target | 770 235 kr | 1 102 927 kr | 0.553 | 12.4 % |
+| 2 år | Gradient Boosting log-target | 710 711 kr | 1 030 689 kr | 0.689 | 11.3 % |
+| 3 år | Random Forest log-target | 615 788 kr | 968 072 kr | 0.732 | 10.3 % |
 
-```text
-Bästa modell: Random Forest log-target
-MAE: cirka 616 000 kr
-RMSE: cirka 968 000 kr
-R²: cirka 0.73
-MAPE: cirka 10 %
-```
+Resultatet visar att 3-årsmodellen är bäst i detta projekt. Den har lägst MAE,
+lägst RMSE, högst R² och lägst MAPE.
 
-Resultatet kan variera något beroende på exakt dataversion och train/test-split.
+Tolkningen är att 1-årsdata är mest aktuell men innehåller för få rader för att
+ge samma stabilitet. 2-årsmodellen är en tydlig förbättring jämfört med 1 år,
+men 3 år ger fortfarande bäst resultat.
 
+Denna del stärker projektet eftersom valet av dataperiod inte bara antas, utan
+testas och analyseras.
 
-## Figurer
+## Visualiseringar
 
-Skriptet sparar figurer i:
+Skripten sparar figurer i respektive output-mapp:
 
 ```text
 outputs/figures/
+outputs/figures_1year/
+outputs/figures_2years/
 ```
 
 Exempel på figurer:
@@ -331,32 +353,30 @@ Exempel på figurer:
 Alla prisgrafer visas i **miljoner SEK** för att vara lättare att läsa.
 Exempel: `6,5` på en axel betyder cirka `6 500 000 kr`.
 
-## Resultatrapport
+## Avgränsning
 
-Efter körning skapas rapporten:
+Det här projektet fokuserar på:
+
+- dataförståelse
+- datarensning inför modellering
+- feature engineering
+- visualisering
+- modellträning
+- modellutvärdering
+- rapportering
+- etisk reflektion
+
+Själva insamlingen av data från Booli ingår inte i projektet. Den hanteras
+separat och resultatet från den processen är CSV-filen:
 
 ```text
-reports/resultat.md
+data/partille_housing_real_2023_today.csv
 ```
-
-Rapporten innehåller:
-
-- sammanfattning
-- syfte
-- datasetbeskrivning
-- hantering av saknade värden
-- val av X och y
-- feature engineering
-- modelljämförelse
-- resultat
-- tolkning
-- begränsningar
-- etisk reflektion
 
 ## Begränsningar
 
-Även om projektet använder verklig data från mer än tre år är bostadspriser
-svåra att prediktera exakt. Viktiga faktorer saknas fortfarande, till exempel:
+Även med verklig data från flera år är bostadspriser svåra att prediktera exakt.
+Viktiga faktorer saknas fortfarande, till exempel:
 
 - exakt mikroläge
 - skick och renoveringsstandard
@@ -375,7 +395,7 @@ Därför ska modellen ses som ett analytiskt stöd, inte som ett facit.
 En bostadsprismodell kan påverka ekonomiska beslut som köp, försäljning,
 lånelöften och uppfattningar om ett områdes värde. Därför är det viktigt att
 modellen inte presenteras som ett objektivt facit. Den bygger på historisk data
-och på de variabler som råkar finnas tillgängliga i datasetet.
+och på de variabler som finns tillgängliga i datasetet.
 
 Det finns flera etiska risker:
 
@@ -383,9 +403,9 @@ Det finns flera etiska risker:
   buller, närhet till service och andra kvalitativa faktorer saknas ofta.
 - **Representationsproblem:** Om vissa områden eller bostadstyper har färre
   observationer kan modellen bli mindre träffsäker för just dessa grupper.
-- **Marknadsförändringar:** Ränteläge, konjunktur och lokala marknadstrender
-  kan förändras snabbt. En modell som tränats på historiska försäljningar kan
-  därför ge missvisande resultat i ett nytt marknadsläge.
+- **Marknadsförändringar:** Ränteläge, konjunktur och lokala marknadstrender kan
+  förändras snabbt. En modell som tränats på historiska försäljningar kan därför
+  ge missvisande resultat i ett nytt marknadsläge.
 - **Övertro på modellen:** Ett exakt tal i kronor kan uppfattas som mer säkert
   än det egentligen är. Därför redovisas även felmått som MAE, RMSE, R² och
   MAPE.
@@ -397,23 +417,31 @@ köp, försäljning, värdering eller lånebeslut.
 
 ## Framtida förbättringsförslag
 
+- Komplettera datasetet med skick, renoveringsår, energiklass och driftskostnad
+  där det går.
+- Lägga till mer exakt lägesinformation, exempelvis avstånd till skola, service
+  och kollektivtrafik.
+- Validera modellen med cross-validation så resultatet blir mindre beroende av
+  en enda train/test-split.
+- Jämföra resultat med och utan `asking_price_sek`, eftersom utgångspris ofta är
+  en stark men ibland saknad feature.
+- Undersöka feature importance för bästa modellen och ta bort features som mest
+  skapar brus.
+- Lägga till marknadsfeatures, till exempel räntenivå, prisindex.
 
-- Förfina PDF-rapporten ytterligare med mer automatiserad layoutkontroll.
-- komplettera med skick, renoveringsår, energiklass och driftskostnad där det går.
-- lägga till mer exakt lägesinformation, exempelvis avstånd till skola, service och kollektivtrafik.
-- validera modellen med cross-validation så resultatet blir mindre beroende av en enda train/test-split.
-- jämföra resultat med och utan `asking_price_sek`, eftersom utgångspris ofta är en stark men ibland saknad feature.
-- undersöka feature importance för bästa modellen och ta bort features som mest skapar brus.
+## Verktyg och programvara
 
-
-## Verktyg och programvara som använts: 
-
-- Python v 3.14.5
+- Python 3.14.5
+- Pandas, NumPy, Matplotlib, Seaborn och Scikit-learn
+- Joblib och Pillow
 - Microsoft VS Code
-- Typora (Skapa / Redigera MD dokument)
-- Chat GPT 5.5 Thinking (För felsökning och tips)
-- Skapa data från Booli. https://github.com/Kazzon-gbg/BostadsData_Partille
+- Git och GitHub
+- Typora för redigering av Markdown
+- Booli-data från separat projekt:
+  `https://github.com/Kazzon-gbg/BostadsData_Partille`
 
-Git länk till projektet:
+GitHub-länk till projektet:
 
-- Github = https://github.com/Kazzon-gbg/Bostadspris-prediktion-i-Partille-kommun 
+```text
+https://github.com/Kazzon-gbg/Bostadspris-prediktion-i-Partille-kommun
+```

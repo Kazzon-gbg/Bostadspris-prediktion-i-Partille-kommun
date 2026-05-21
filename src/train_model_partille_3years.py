@@ -1,12 +1,12 @@
-# Bostadspris-prediktion: Partille / Sävedalen - förbättrad modellversion
+# Bostadspris-prediktion: Partille / Sävedalen - 3 years
 """
 Inlämningsuppgift
 
 Mikael Karlsson 2026 för ITHS Pythonprogrammering för AI-utveckling VT 2026
 
-Skriptet läser in en städad CSV-fil med verkliga bostadsförsäljningar från
-Partille kommun, skapar tydliga figurer, tränar flera regressionsmodeller
-och sparar en resultatrapport.
+Skriptet läser in huvuddatafilen med cirka tre års verkliga bostadsförsäljningar
+från Partille kommun, skapar tydliga figurer, tränar flera regressionsmodeller
+och sparar både Markdown-rapport och PDF-rapport.
 
 Förväntad datafil:
     data/partille_housing_real_2023_today.csv
@@ -25,7 +25,16 @@ Förbättringar som har lagts till under projektets utveckling:
     - Tydligare korrelationsgraf som visar samband med slutpris i stället för en svårläst heatmap.
 """
 import os
+from datetime import datetime
+
+from modules import config
 from modules.config import PROJECT_ROOT
+
+
+TIMESTAMP = datetime.now().strftime("%y%m%d_%H%M")
+THREE_YEAR_REPORT_PATH = PROJECT_ROOT / "reports" / f"report_3years_{TIMESTAMP}.md"
+
+config.REPORT_PATH = THREE_YEAR_REPORT_PATH
 
 os.environ.setdefault("MPLCONFIGDIR", str(PROJECT_ROOT / "outputs" / ".matplotlib"))
 os.environ.setdefault("XDG_CACHE_HOME", str(PROJECT_ROOT / "outputs" / ".cache"))
@@ -43,7 +52,7 @@ from modules.project import HousingPriceProject
 
 def main() -> None:
     project = HousingPriceProject()
-    result = project.run(create_pdf=False)
+    result = project.run(create_pdf=True)
     project.print_completion_summary(result)
 
 

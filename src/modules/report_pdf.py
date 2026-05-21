@@ -27,9 +27,14 @@ FIGURE_CAPTIONS = [
 
 
 def get_timestamped_pdf_path() -> object:
-    """Skapa filnamn enligt report_YYMMDD_HHMM.pdf i reports-mappen."""
+    """Skapa tidsstämplat PDF-filnamn utifrån aktuell rapporttyp."""
     timestamp = datetime.now().strftime("%y%m%d_%H%M")
-    return REPORT_PATH.parent / f"report_{timestamp}.pdf"
+    if REPORT_PATH.stem.startswith("report_"):
+        return REPORT_PATH.with_suffix(".pdf")
+
+    report_suffix = REPORT_PATH.stem.replace("resultat", "").strip("_")
+    filename_prefix = "report" if not report_suffix else f"report_{report_suffix}"
+    return REPORT_PATH.parent / f"{filename_prefix}_{timestamp}.pdf"
 
 
 def _add_footer(fig: plt.Figure, page_number: int) -> None:
