@@ -138,6 +138,7 @@ ett färdigt dataset, medan datahämtning är ett separat förarbete.
 │       ├── config.py
 │       ├── figures.py
 │       ├── functions.py
+│       ├── project.py
 │       ├── report.py
 │       └── report_pdf.py
 ├── reports/
@@ -185,6 +186,31 @@ Skriptet gör följande:
 7. Utvärderar modellerna.
 8. Sparar bästa modellen.
 9. Skapar en resultatrapport.
+
+Projektets huvudflöde körs via klassen `HousingPriceProject` i
+`src/modules/project.py`. Klassen samlar ansvar för dataladdning,
+feature engineering, modellträning, utvärdering och rapportering. Det gör
+koden lättare att felsöka och vidareutveckla än om hela flödet låg direkt i
+ett enda skript.
+
+## Objektorienterad struktur
+
+Projektet använder både funktioner och objektorienterad programmering.
+Hjälpfunktionerna i `src/modules/functions.py`, `src/modules/figures.py` och
+`src/modules/report.py` gör avgränsade delar av arbetet, medan
+`HousingPriceProject` fungerar som en samordnande klass för hela
+maskininlärningsflödet.
+
+Klassen visar objektorienterade principer genom att:
+
+- lagra projektets tillstånd i attribut, till exempel dataset, feature-listor,
+  tränade modeller, resultat och bästa modell
+- dela upp arbetsflödet i metoder som `prepare_data()`, `train_and_evaluate()`,
+  `write_reports()` och `run()`
+- använda ett resultatobjekt, `HousingPriceProjectResult`, för att samla
+  information från en färdig körning
+- göra flödet mer testbart och felsökningsbart eftersom varje steg kan köras
+  och kontrolleras separat
 
 ## Extra funktion: PDF-rapport
 
@@ -346,31 +372,28 @@ Därför ska modellen ses som ett analytiskt stöd, inte som ett facit.
 
 ## Etisk reflektion
 
-En bostadsprismodell kan påverka ekonomiska beslut. Därför bör resultatet
-användas med försiktighet. Om datan är ofullständig eller inte representerar
-alla områden och bostadstyper rättvist kan modellen ge missvisande resultat.
+En bostadsprismodell kan påverka ekonomiska beslut som köp, försäljning,
+lånelöften och uppfattningar om ett områdes värde. Därför är det viktigt att
+modellen inte presenteras som ett objektivt facit. Den bygger på historisk data
+och på de variabler som råkar finnas tillgängliga i datasetet.
 
-Modellen bör inte användas som ensam grund för köp, försäljning eller
-lånebeslut. En mänsklig bedömning bör alltid finnas kvar.
+Det finns flera etiska risker:
 
-## Kort slutsats
+- **Ofullständig data:** Skick, renoveringsstandard, planlösning, utsikt,
+  buller, närhet till service och andra kvalitativa faktorer saknas ofta.
+- **Representationsproblem:** Om vissa områden eller bostadstyper har färre
+  observationer kan modellen bli mindre träffsäker för just dessa grupper.
+- **Marknadsförändringar:** Ränteläge, konjunktur och lokala marknadstrender
+  kan förändras snabbt. En modell som tränats på historiska försäljningar kan
+  därför ge missvisande resultat i ett nytt marknadsläge.
+- **Övertro på modellen:** Ett exakt tal i kronor kan uppfattas som mer säkert
+  än det egentligen är. Därför redovisas även felmått som MAE, RMSE, R² och
+  MAPE.
 
-Projektet visar ett komplett arbetsflöde för ett AI-/maskininlärningsprojekt i
-Python:
-
-- dataimport från CSV
-- dataförståelse
-- feature engineering
-- visualisering
-- preprocessing
-- modellträning
-- utvärdering
-- rapportering
-- etisk reflektion
-
-Resultatet visar att det går att skapa en användbar modell för bostadspriser i
-Partille kommun, men också att modellens kvalitet beror mer på relevanta
-features än på antalet kolumner.
+För att minska risken för felaktig användning redovisar projektet både
+modellens resultat och dess begränsningar. Modellen bör användas som ett
+analytiskt stöd tillsammans med mänsklig bedömning, inte som ensam grund för
+köp, försäljning, värdering eller lånebeslut.
 
 ## Framtida förbättringsförslag
 
@@ -394,4 +417,3 @@ features än på antalet kolumner.
 Git länk till projektet:
 
 - Github = https://github.com/Kazzon-gbg/Bostadspris-prediktion-i-Partille-kommun 
-
