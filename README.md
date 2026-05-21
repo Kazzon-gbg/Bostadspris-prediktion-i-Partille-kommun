@@ -389,6 +389,9 @@ features än på antalet kolumner.
 - Microsoft VS Code
 - Typora (Skapa / Redigera MD dokument)
 - Chat GPT 5.5 Thinking (För felsökning och tips)
+- Skapa data från Booli. https://github.com/Kazzon-gbg/BostadsData_Partille
+
+Git länk till projektet:
+
 - Github = https://github.com/Kazzon-gbg/Bostadspris-prediktion-i-Partille-kommun 
 
-* Skapa data från Booli. https://github.com/Kazzon-gbg/BostadsData_Partille
