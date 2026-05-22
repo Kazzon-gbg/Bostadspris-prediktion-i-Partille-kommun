@@ -6,22 +6,22 @@ Detta projekt är ett examensarbete för kursen **ITHS Pythonprogrammering för
 AI-utveckling VT-2026**
 
 Projektet undersöker om det går att prediktera slutpris för bostäder i
-**Partille kommun**, inklusive **Sävedalen**, med hjälp av verklig bostadsdata
+Partille kommun, inklusive Sävedalen, med hjälp av verklig bostadsdata
 och maskininlärning.
 
 Projektet visar ett komplett AI-arbetsflöde:
 
-1. läsa in bostadsdata från CSV
-2. kontrollera och rensa data
-3. skapa features
-4. visualisera data
-5. träna flera maskininlärningsmodeller
-6. jämföra modellernas resultat
-7. analysera om 1, 2 eller 3 års data fungerar bäst
-8. skapa Markdown- och PDF-rapporter
-9. reflektera över modellens begränsningar och etiska risker
+1. Läsa in bostadsdata från CSV.
+2. Kontrollera och rensa data.
+3. Skapa features.
+4. Visualisera data.
+5. Träna flera maskininlärningsmodeller.
+6. Jämföra modellernas resultat.
+7. Analysera om 1, 2 eller 3 års data fungerar bäst.
+8. Skapa Markdown- och PDF-rapporter.
+9. Reflektera över modellens begränsningar och etiska risker.
 
-Själva hämtningen av bostadsdata från Booli ingår **inte** i detta projekt.
+Själva hämtningen av bostadsdata från Booli ingår inte i detta projekt.
 Datahämtningen har gjorts separat och detta projekt fokuserar på analys,
 modellering, rapportering och tolkning.
 
@@ -41,7 +41,7 @@ Kan vi prediktera bostäders slutpris baserat på egenskaper som:
 - ungefärliga geografiska features, till exempel avstånd till Partille centrum,
   Göteborg centrum och Sävedalen centrum
 
-Eftersom slutpriset är ett numeriskt värde är detta ett **regressionsproblem**.
+Eftersom slutpriset är ett numeriskt värde är detta ett regressionsproblem.
 
 ## Dataset
 
@@ -111,9 +111,9 @@ saknas ibland utgångspris, rum, biarea eller tomtarea.
 
 I modellens preprocessing hanteras detta genom:
 
-- medianimputering för numeriska kolumner
-- imputering med vanligaste värde för kategoriska kolumner
-- one-hot encoding för kategoriska kolumner
+- Medianimputering för numeriska kolumner
+- Imputering med vanligaste värde för kategoriska kolumner
+- One-hot encoding för kategoriska kolumner
 
 Vissa kolumner används inte som features eftersom de kan skapa brus,
 överanpassning eller dataläckage. Exempel:
@@ -260,13 +260,13 @@ maskininlärningsflödet.
 
 Klassen visar objektorienterade principer genom att:
 
-- lagra projektets tillstånd i attribut, till exempel dataset, feature-listor,
+- Lagra projektets tillstånd i attribut, till exempel dataset, feature-listor,
   tränade modeller, resultat och bästa modell
-- dela upp arbetsflödet i metoder som `prepare_data()`, `train_and_evaluate()`,
+- Dela upp arbetsflödet i metoder som `prepare_data()`, `train_and_evaluate()`,
   `write_reports()` och `run()`
-- använda resultatobjektet `HousingPriceProjectResult` för att samla information
+- Använda resultatobjektet `HousingPriceProjectResult` för att samla information
   från en färdig körning
-- göra flödet mer testbart och felsökningsbart eftersom varje steg kan köras och
+- Göra flödet mer testbart och felsökningsbart eftersom varje steg kan köras och
   kontrolleras separat
 
 ## Feature engineering
@@ -300,10 +300,10 @@ domineras av de dyraste objekten.
 
 Modellerna utvärderas med:
 
-- **MAE** – genomsnittligt absolut fel i kronor
-- **RMSE** – rotmedelkvadratfel, straffar stora fel hårdare
-- **R²** – hur stor del av variationen i slutpris modellen förklarar
-- **MAPE** – genomsnittligt procentuellt fel
+- **MAE** – genomsnittligt absolut fel i kronor.
+- **RMSE** – rotmedelkvadratfel, straffar stora fel hårdare.
+- **R²** – hur stor del av variationen i slutpris modellen förklarar.
+- **MAPE** – genomsnittligt procentuellt fel.
 
 RMSE används för att välja bästa modell i rapporterna eftersom stora fel i
 bostadspris kan vara särskilt viktiga. MAPE är pedagogiskt eftersom det visar
@@ -357,14 +357,14 @@ Exempel: `6,5` på en axel betyder cirka `6 500 000 kr`.
 
 Det här projektet fokuserar på:
 
-- dataförståelse
-- datarensning inför modellering
-- feature engineering
-- visualisering
-- modellträning
-- modellutvärdering
-- rapportering
-- etisk reflektion
+- Dataförståelse
+- Datarensning inför modellering
+- Feature engineering
+- Visualisering
+- Modellträning
+- Modellutvärdering
+- Rapportering
+- Etisk reflektion
 
 Själva insamlingen av data från Booli ingår inte i projektet. Den hanteras
 separat och resultatet från den processen är CSV-filen:
@@ -378,15 +378,15 @@ data/partille_housing_real_2023_today.csv
 Även med verklig data från flera år är bostadspriser svåra att prediktera exakt.
 Viktiga faktorer saknas fortfarande, till exempel:
 
-- exakt mikroläge
-- skick och renoveringsstandard
-- pålitligt byggår för alla objekt
-- energiklass
-- planlösning
-- utsikt
-- närhet till skolor, service och kommunikationer
-- budgivningsläge
-- ränteläge och marknadsläge
+- Exakt mikroläge.
+- Skick och renoveringsstandard.
+- Pålitligt byggår för alla objekt.
+- Energiklass.
+- Planlösning.
+- Utsikt.
+- Närhet till skolor, service och kommunikationer.
+- Budgivningsläge.
+- Ränteläge och marknadsläge.
 
 Därför ska modellen ses som ett analytiskt stöd, inte som ett facit.
 
@@ -435,12 +435,15 @@ köp, försäljning, värdering eller lånebeslut.
 - Pandas, NumPy, Matplotlib, Seaborn och Scikit-learn
 - Joblib och Pillow
 - Microsoft VS Code
+- ChatGPT som stödverktyg för felsökning, kodgranskning, strukturering och
+  språkgranskning. Projektets problemformulering, dataset, modellval,
+  tolkningar och slutsatser är mina egna.
 - Git och GitHub
 - Typora för redigering av Markdown
 - Booli-data från separat projekt:
   `https://github.com/Kazzon-gbg/BostadsData_Partille`
 
-GitHub-länk till projektet:
+Git-länk till projektet:
 
 ```text
 https://github.com/Kazzon-gbg/Bostadspris-prediktion-i-Partille-kommun

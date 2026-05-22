@@ -293,10 +293,13 @@ def _save_figure_grid_page(pdf: PdfPages, figure_items: list[tuple[str, str, str
     fig.text(0.07, 0.955, "Diagram och modellkontroll", fontsize=16.5, fontweight="bold", color="#1f2933")
     fig.text(0.07, 0.932, "Varje diagram visar datakvalitet, prisbild eller modellens träffsäkerhet.", fontsize=8.8, color="#5f6b76")
 
-    slots = [
-        (0.07, 0.515, 0.86, 0.35),
-        (0.07, 0.105, 0.86, 0.35),
-    ]
+    if len(figure_items) == 1:
+        slots = [(0.07, 0.17, 0.86, 0.66)]
+    else:
+        slots = [
+            (0.07, 0.525, 0.86, 0.35),
+            (0.07, 0.115, 0.86, 0.35),
+        ]
 
     for (filename, title, caption), (x, y, width, height) in zip(figure_items, slots, strict=False):
         image_path = FIGURE_DIR / filename
@@ -314,20 +317,29 @@ def _save_figure_grid_page(pdf: PdfPages, figure_items: list[tuple[str, str, str
             zorder=-10,
         )
         fig.add_artist(panel)
-        fig.text(x + 0.018, y + height - 0.035, title, fontsize=11.0, fontweight="bold", color="#1f2933", va="top", zorder=10)
+        title_y = y + height - 0.035
+        caption_y = title_y - 0.038
+        fig.text(x + 0.024, title_y, title, fontsize=11.0, fontweight="bold", color="#1f2933", va="top", zorder=10)
         fig.text(
-            x + 0.018,
-            y + height - 0.075,
-            _wrapped_text(caption, width=31),
-            fontsize=6.7,
+            x + 0.024,
+            caption_y,
+            _wrapped_text(caption, width=105),
+            fontsize=7.5,
             color="#3f4952",
-            linespacing=1.18,
+            linespacing=1.22,
             va="top",
             zorder=10,
         )
 
         image = _read_cropped_image(image_path)
-        ax = fig.add_axes([x + 0.235, y + 0.030, width - 0.265, height - 0.060])
+        image_top_padding = 0.125 if len(figure_items) == 2 else 0.145
+        image_bottom_padding = 0.035
+        ax = fig.add_axes([
+            x + 0.045,
+            y + image_bottom_padding,
+            width - 0.090,
+            height - image_top_padding - image_bottom_padding,
+        ])
         ax.set_zorder(5)
         ax.set_facecolor("white")
         ax.imshow(image)
@@ -359,8 +371,8 @@ def write_pdf_report(
             for figure_item in FIGURE_CAPTIONS
             if (FIGURE_DIR / figure_item[0]).exists()
         ]
-        for start_index in range(0, len(existing_figures), 2):
-            _save_figure_grid_page(pdf, existing_figures[start_index:start_index + 2], page_number)
+        for figure_item in existing_figures:
+            _save_figure_grid_page(pdf, [figure_item], page_number)
             page_number += 1
 
         if len(existing_figures) == 0:

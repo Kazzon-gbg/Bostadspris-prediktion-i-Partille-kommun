@@ -181,13 +181,21 @@ def _add_footer(fig: plt.Figure, page_number: int) -> None:
     )
 
 
-def _add_table(ax: plt.Axes, rows: list[list[str]], columns: list[str], bbox: list[float], font_size: float) -> None:
+def _add_table(
+    ax: plt.Axes,
+    rows: list[list[str]],
+    columns: list[str],
+    bbox: list[float],
+    font_size: float,
+    col_widths: list[float] | None = None,
+) -> None:
     table = ax.table(
         cellText=rows,
         colLabels=columns,
         cellLoc="left",
         colLoc="left",
         bbox=bbox,
+        colWidths=col_widths,
     )
     table.auto_set_font_size(False)
     table.set_fontsize(font_size)
@@ -233,7 +241,8 @@ def _save_summary_page(pdf: PdfPages) -> None:
         summary_table,
         ["Period", "Rader", "Bästa modell", "MAE", "RMSE", "R2", "MAPE"],
         bbox=[0.04, 0.61, 0.92, 0.16],
-        font_size=7.8,
+        font_size=7.2,
+        col_widths=[0.11, 0.10, 0.30, 0.13, 0.14, 0.10, 0.12],
     )
 
     ax.text(0.04, 0.54, "Huvudslutsats", fontsize=13, fontweight="bold", color="#1f2933", transform=ax.transAxes)
@@ -279,11 +288,13 @@ def _save_metric_page(pdf: PdfPages) -> None:
         ax.set_title(title, fontsize=11, fontweight="bold")
         ax.set_ylabel(ylabel, fontsize=9)
         ax.grid(True, alpha=0.25)
+        value_min = min(values)
+        value_max = max(values)
+        value_range = value_max - value_min if value_max != value_min else abs(value_max) * 0.08
+        y_padding = value_range * 0.22
+        ax.set_ylim(value_min - y_padding, value_max + y_padding)
         if column in {"MAE", "RMSE"}:
             ax.yaxis.set_major_formatter(FuncFormatter(lambda value, _pos: f"{value / 1_000_000:.2f}"))
-        for x_value, y_value in zip(periods, values, strict=True):
-            label = f"{y_value:.3f}" if column == "R2" else f"{y_value:.1f}%" if column == "MAPE" else _format_number(y_value)
-            ax.annotate(label, (x_value, y_value), textcoords="offset points", xytext=(0, 8), ha="center", fontsize=8)
 
     fig.text(
         0.08,
@@ -322,6 +333,7 @@ def _save_model_tables_page(pdf: PdfPages) -> None:
             ["Modell", "MAE", "RMSE", "R2", "MAPE"],
             bbox=[0.04, y_position, 0.92, 0.18],
             font_size=7.6,
+            col_widths=[0.36, 0.18, 0.18, 0.12, 0.16],
         )
 
     _add_footer(fig, 3)

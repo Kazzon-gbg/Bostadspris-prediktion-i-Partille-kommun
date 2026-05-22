@@ -1,6 +1,6 @@
 # Slutrapport: jämförelse mellan 1, 2 och 3 år
 
-Skapad: 2026-05-21 23:48
+Skapad: 2026-05-22 11:08
 
 ## Syfte
 
