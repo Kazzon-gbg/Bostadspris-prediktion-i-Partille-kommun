@@ -1,4 +1,4 @@
-# Bostadspris-prediktion: Partille / Sävedalen - 3 years
+# Bostadspris-prediktion: Partille kommun
 """
 Inlämningsuppgift
 
@@ -46,9 +46,9 @@ matplotlib.use("Agg")
 from modules.project import HousingPriceProject
 
 
-# =====================================================================
+# -------------------------------------------------------------------
 # MAIN
-# =====================================================================
+# -------------------------------------------------------------------
 
 def main() -> None:
     project = HousingPriceProject()
