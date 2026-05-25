@@ -435,9 +435,6 @@ köp, försäljning, värdering eller lånebeslut.
 - Pandas, NumPy, Matplotlib, Seaborn och Scikit-learn
 - Joblib och Pillow
 - Microsoft VS Code
-- ChatGPT som stödverktyg för felsökning, kodgranskning, strukturering och
-  språkgranskning. Projektets problemformulering, dataset, modellval,
-  tolkningar och slutsatser är mina egna.
 - Git och GitHub
 - Typora för redigering av Markdown
 - Booli-data från separat projekt:
