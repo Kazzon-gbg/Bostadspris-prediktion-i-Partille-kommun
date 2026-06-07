@@ -1,9 +1,9 @@
 # Bostadspris-prediktion i Partille kommun med Python och AI
 
 **Mikael Karlsson 2026**   
-ITHS Pythonprogrammering för
+
+Detta projekt är ett examensarbete för kursen ITHS Pythonprogrammering för
 AI-utveckling VT-2026
-Detta projekt är ett examensarbete för kursen ****
 
 Projektet undersöker om det går att prediktera slutpris för bostäder i
 Partille kommun, inklusive Sävedalen, med hjälp av verklig bostadsdata
